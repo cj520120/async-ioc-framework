@@ -1,0 +1,8 @@
+pydantic>=2.0.0
+sqlalchemy>=2.0.0
+asyncmy>=0.2.0
+pymysql>=1.1.0
+pyyaml>=6.0 
+croniter>=1.4.1    
+aiosqlite>=0.22.0  
+aiomysql>=0.3.0

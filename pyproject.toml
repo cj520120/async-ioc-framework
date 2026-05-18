@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "async-ioc-framework"
+version = "0.1.0"
+authors = [{ name = "chenjun", email = "cj520120@163.com" }]
+description = "A lightweight, high-performance async IoC container"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "Apache-2.0" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Framework :: AsyncIO",
+    "License :: OSI Approved :: Apache Software License",
+]
+dependencies = [
+    "pyyaml>=6.0",
+    "croniter>=1.4.1",
+]
+
+[project.urls]
+Homepage = "https://gitcode.com/cj520120/async-ioc-framework"
+"Bug Reports" = "https://gitcode.com/cj520120/async-ioc-framework/issues"
+
+[project.optional-dependencies]
+mysql = ["asyncmy>=0.2.11", "sqlalchemy>=2.0.0"]
+sqlite = ["aiosqlite>=0.22.0", "sqlalchemy>=2.0.0"]
+full-db = ["sqlalchemy>=2.0.0", "asyncmy>=0.2.11", "aiosqlite>=0.22.0"]
+web = ["pydantic>=2.0.0"]
+dev = ["pytest>=7.0", "pytest-asyncio", "black", "mypy"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+exclude = ["tests", "tests.*"]
