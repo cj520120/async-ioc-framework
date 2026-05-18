@@ -375,17 +375,10 @@ async def get_user(id: int):
 
 - EventPublisher – 事件发布器
 
-## 运行测试
-
-bash
-
-# 直接运行集成测试
-
-python tests/test_container_value.py
-
+ 
 # 使用 pytest（需安装 pytest-asyncio）
 
-pytest tests/
+pytest
 
 # 贡献
 
