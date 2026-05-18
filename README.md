@@ -72,7 +72,10 @@ class UserService:
 ```yaml
 app_name: MyApp
 database:
+  type: mysql
   url: mysql://localhost/test
+  username: root
+  password: pass123
 timeout: 30
 ```
 
