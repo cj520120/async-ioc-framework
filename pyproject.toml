@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "async-ioc-framework"
-version = "0.1.0"
+version = "0.0.1-beta"
 authors = [{ name = "chenjun", email = "cj520120@163.com" }]
 description = "A lightweight, high-performance async IoC container"
 readme = "README.md"
