@@ -21,7 +21,7 @@ T = TypeVar("T")
 
 class ApplicationContext:
     """
-    静态 IoC 容器，支持依赖注入、生命周期管理和定时任务。  
+    静态 IoC 容器，支持依赖注入、生命周期管理和定时任务。
     注：容器在 refresh() 时创建所有单例 Bean。get_bean() 仅用于获取已创建实例，不会触发新创建。
     """
 

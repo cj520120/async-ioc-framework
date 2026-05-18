@@ -1,5 +1,7 @@
-import pytest
 import logging
+
+import pytest
+
 from ioc import ApplicationContext, Component, Event, EventListener, EventPublisher
 
 logging.basicConfig(level=logging.DEBUG)

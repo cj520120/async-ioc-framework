@@ -1,10 +1,9 @@
 import pytest
-import tempfile
-import os
-from ioc import ApplicationContext, Component
-from ioc.ext.data import DatabaseFactory, transactional, get_current_session
 from sqlalchemy import Column, Integer, String, select
 from sqlalchemy.orm import declarative_base
+
+from ioc import ApplicationContext, Component
+from ioc.ext.data import DatabaseFactory, get_current_session, transactional
 
 Base = declarative_base()
 
@@ -73,6 +72,7 @@ async def test_transaction_rollback(config_file):
             session = get_current_session()
             result = await session.execute(select(User))
             return len(result.scalars().all())
+
     await ApplicationContext.refresh()
 
     factory = ApplicationContext.get_bean(DatabaseFactory)

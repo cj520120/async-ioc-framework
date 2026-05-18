@@ -2,10 +2,10 @@ import asyncio
 import logging
 import signal
 import time
+from pathlib import Path
 from typing import List, Optional, Union
 
 from ioc import ApplicationContext
-from pathlib import Path
 
 logger = logging.getLogger(__name__)
 

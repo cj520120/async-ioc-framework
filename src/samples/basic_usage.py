@@ -20,19 +20,15 @@ async-ioc-framework 快速入门示例
 
 import asyncio
 import logging
-import os
+from pathlib import Path
 from typing import Annotated
 
 from sqlalchemy import Column, Integer, String, select
 from sqlalchemy.orm import declarative_base
 
-from ioc import (
-    ApplicationContext, Component, Value, Qualifier,
-    PostConstruct, PreDestroy, Task, Event, EventListener, EventPublisher
-)
-from ioc.ext.data import transactional, get_current_session, DatabaseFactory
+from ioc import Component, Event, EventListener, EventPublisher, PostConstruct, PreDestroy, Task, Value
+from ioc.ext.data import DatabaseFactory, get_current_session, transactional
 from ioc.runner import run_async
-from pathlib import Path
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -86,7 +82,7 @@ class ScheduledTasks:
     async def run_every_5_seconds(self):
         logger.info("Periodic task executed (every 5s)")
 
-    @Task(cron="0 * * * *")   # 每小时整点执行
+    @Task(cron="0 * * * *")  # 每小时整点执行
     async def run_hourly(self):
         logger.info("Hourly cron task executed")
 
@@ -102,7 +98,7 @@ class ScheduledTasks:
 @Component
 class UserDao:
     def __init__(self, factory: DatabaseFactory):
-        self.factory = factory   # 注意：属性名应与 __init__ 参数一致
+        self.factory = factory  # 注意：属性名应与 __init__ 参数一致
 
     @PostConstruct
     async def init(self):

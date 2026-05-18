@@ -1,8 +1,6 @@
 import pytest
-from ioc import (
-    ApplicationContext, Component, Condition, OnPropertyCondition,
-    OnClassExists, AllConditions, MissingDependencyError
-)
+
+from ioc import AllConditions, ApplicationContext, Component, MissingDependencyError, OnClassExists, OnPropertyCondition
 
 
 @pytest.mark.asyncio
@@ -36,9 +34,9 @@ async def test_on_class_exists_condition(config_file):
 
     ApplicationContext.initialize(config_file)
     await ApplicationContext.refresh()
- 
+
     try:
-        import sqlalchemy.ext.asyncio
+        pass
     except ImportError:
         pytest.skip("sqlalchemy not installed")
     else:
@@ -51,10 +49,7 @@ async def test_on_class_exists_condition(config_file):
 
 @pytest.mark.asyncio
 async def test_all_conditions(config_file):
-    @Component(condition=AllConditions(
-        OnPropertyCondition("feature.new.enabled", having_value=True),
-        OnClassExists("sqlalchemy.ext.asyncio.AsyncSession")
-    ))
+    @Component(condition=AllConditions(OnPropertyCondition("feature.new.enabled", having_value=True), OnClassExists("sqlalchemy.ext.asyncio.AsyncSession")))
     class BothTrue:
         pass
 
@@ -62,7 +57,7 @@ async def test_all_conditions(config_file):
     await ApplicationContext.refresh()
 
     try:
-        import sqlalchemy.ext.asyncio
+        pass
     except ImportError:
         # 条件不满足（类不存在）-> 组件不应创建
         with pytest.raises(MissingDependencyError):

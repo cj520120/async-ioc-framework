@@ -1,9 +1,8 @@
-import pytest
 from typing import Annotated
-from ioc import (
-    ApplicationContext, Component, Qualifier, Value,
-    MissingDependencyError
-)
+
+import pytest
+
+from ioc import ApplicationContext, Component, MissingDependencyError, Qualifier, Value
 
 
 # ========== 组件定义（模块级别） ==========
@@ -20,12 +19,14 @@ class Service:
 
 @Component(name="implA")
 class InterfaceA:
-    def who(self): return "A"
+    def who(self):
+        return "A"
 
 
 @Component(name="implB")
 class InterfaceB:
-    def who(self): return "B"
+    def who(self):
+        return "B"
 
 
 @Component
@@ -40,12 +41,14 @@ class BaseService:
 
 @Component(primary=True)
 class MainService(BaseService):
-    def name(self): return "main"
+    def name(self):
+        return "main"
 
 
 @Component
 class OtherService(BaseService):
-    def name(self): return "other"
+    def name(self):
+        return "other"
 
 
 @Component

@@ -1,6 +1,8 @@
-import pytest
 import asyncio
-from ioc import ApplicationContext, Component, Task, MissingDependencyError
+
+import pytest
+
+from ioc import ApplicationContext, Component, Task
 
 
 @pytest.mark.asyncio
