@@ -2,14 +2,15 @@ import asyncio
 import logging
 import signal
 import time
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from ioc import ApplicationContext
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
 
-async def run_async(config_file: str, base_path: str, modules: Optional[List[str]] = None, **kwargs):
+async def run_async(config_file: str, base_path: Union[Path, str], modules: Optional[List[str]] = None, **kwargs):
     """
     启动 IoC 容器，扫描并加载组件，等待退出信号后优雅关闭。
 

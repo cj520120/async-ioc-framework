@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "async-ioc-framework"
-version = "0.0.1-beta"
+version = "0.0.2"
 authors = [{ name = "chenjun", email = "cj520120@163.com" }]
 description = "A lightweight, high-performance async IoC container"
 readme = "README.md"
@@ -31,6 +31,9 @@ sqlite = ["aiosqlite>=0.22.0", "sqlalchemy>=2.0.0"]
 full-db = ["sqlalchemy>=2.0.0", "asyncmy>=0.2.11", "aiosqlite>=0.22.0"]
 web = ["pydantic>=2.0.0"]
 dev = ["pytest>=7.0", "pytest-asyncio", "black", "mypy"]
+all = [
+    "async-ioc-framework[mysql,sqlite,web,dev]",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]

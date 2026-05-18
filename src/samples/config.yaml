@@ -1,0 +1,16 @@
+app:
+  name: "My Awesome App"
+  version: "2.0.0"
+
+database:
+  type: sqlite
+  file: "db.sqlite3"
+  # 如果使用 MySQL：
+  # type: mysql
+  # host: localhost
+  # port: 3306
+  # username: root
+  # password: secret
+  # database: mydb
+
+active_profiles: ["dev"]   # 可选，用于 @Component(profile=...)

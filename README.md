@@ -32,6 +32,12 @@
 
 # 安装
 
+## 使用 pip安装
+
+```bash
+pip install async-ioc-framework
+```
+
 ## 从源码安装
 
 ```bash
@@ -42,7 +48,13 @@ pip install -e .
 
 ## 可选依赖
 
-数据库支持：pip install -e .[mysql]（自动包含 SQLAlchemy 和对应驱动）
+数据库支持：pip install 'async-ioc-framework[mysql,sqlite]'（自动包含 SQLAlchemy 和对应驱动）
+
+## 完整安装
+
+```bash
+pip install 'async-ioc-framework[all]'
+```
 
 # 快速开始
 

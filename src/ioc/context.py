@@ -36,14 +36,15 @@ class ApplicationContext:
     _initialized = False
 
     @classmethod
-    def scan_directory(cls, base_path: Path, base_package: str = "", raise_on_error: bool = False) -> None:
+    def scan_directory(cls, base_path: Union[Path, str], base_package: str = "", raise_on_error: bool = False) -> None:
         """
         递归扫描目录下的所有 .py 文件，动态导入并触发 @Component 注册。
         :param base_path: 项目绝对路径
         :param base_package: 指定基础包名（用于构造模块名）
         :param raise_on_error: 是否在导入失败时抛出异常
         """
-
+        if not isinstance(base_path, Path):
+            base_path = Path(base_path)
         scan_path = base_path / base_package
         logger.info(f"开始扫描目录: {base_path} base package: {base_package}")
         for py_file in scan_path.rglob("*.py"):
