@@ -375,7 +375,6 @@ async def get_user(id: int):
 
 - EventPublisher – 事件发布器
 
- 
 # 使用 pytest（需安装 pytest-asyncio）
 
 pytest
@@ -387,3 +386,4 @@ pytest
 # 仓库地址
 
 https://gitcode.com/cj520120/async-ioc-framework.git
+https://gitee.com/cj520120/async-ioc-framework.git
