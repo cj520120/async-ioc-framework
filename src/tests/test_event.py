@@ -2,7 +2,8 @@ import logging
 
 import pytest
 
-from ioc import ApplicationContext, Component, Event, EventListener, EventPublisher
+from ioc import ApplicationContext, Component
+from ioc.events import Event, EventListener, EventPublisher
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)

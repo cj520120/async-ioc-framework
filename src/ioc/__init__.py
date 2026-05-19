@@ -25,7 +25,7 @@ from .context import ApplicationContext
 
 # 组件装饰器
 from .component import Component
-from .event import Event, EventListener, EventPublisher
+from .events import Event, EventListener, EventPublisher
 
 # 定义公开接口
 __all__ = [

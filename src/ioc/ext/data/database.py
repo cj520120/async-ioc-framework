@@ -1,4 +1,5 @@
 import logging
+from abc import ABC, abstractmethod
 from typing import AsyncContextManager, Optional
 from urllib.parse import quote_plus
 
@@ -7,63 +8,50 @@ from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 from ...component import Component
 from ...config import AppConfig
 from ...decorators import PostConstruct, PreDestroy
-
+from typing import List 
 logger = logging.getLogger(__name__)
+
+
+class DatabaseInitializer(ABC):
+
+    engine: Optional[AsyncEngine] = None
+    session_factory: Optional[async_sessionmaker[AsyncSession]] = None
+    async_url: Optional[str] = None
+
+    @abstractmethod
+    def parse(self,config: dict):
+        pass
+    @abstractmethod
+    def get_type(self)->str:
+        pass
 
 
 @Component(priority=1)
 class DatabaseFactory:
-    def __init__(self, app_config: AppConfig):
+    def __init__(self, app_config: AppConfig,initalizers:List[DatabaseInitializer]):
         self.config = app_config
         self.engine: Optional[AsyncEngine] = None
         self.session_factory: Optional[async_sessionmaker[AsyncSession]] = None
-        self._parse_config()
+        self.initalizers=initalizers
+        # self._parse_config()
 
     def get_engine(self) -> AsyncEngine:
         if self.engine is None:
             raise RuntimeError("DatabaseFactory not initialized")
         return self.engine
-
-    def _parse_config(self):
-        db = self.config.get("database", {})
-        self.db_type = db.get("type", "mysql")
-        if self.db_type not in ("mysql", "sqlite"):
-            raise ValueError(f"Unsupported database type: {self.db_type}")
-
-        if self.db_type == "sqlite":
-            database_file = db.get("file", "db.sqlite3")
-            self.async_url = f"sqlite+aiosqlite:///{database_file}"
-            self.sync_url = f"sqlite:///{database_file}"
-            self.connect_args = db.get("connect_args", {"check_same_thread": False})
-            if "isolation_level" not in self.connect_args:
-                self.connect_args["isolation_level"] = "DEFERRED"
-            self.engine_kwargs = db.get("engine_kwargs", {})
-        else:  # mysql
-            host = db.get("host", "localhost")
-            port = int(db.get("port", 3306))
-            username = db.get("username", "root")
-            password = quote_plus(db.get("password", ""))
-            database = db.get("database", "test")
-            charset = db.get("charset", "utf8mb4")
-            self.async_url = f"mysql+asyncmy://{username}:{password}@{host}:{port}/{database}?charset={charset}"
-            self.connect_args = {}
-            # 连接池配置可外部化
-            pool_config = db.get("pool", {})
-            self.engine_kwargs = {
-                "pool_recycle": pool_config.get("recycle", 3600),
-                "pool_size": pool_config.get("size", 10),
-                "max_overflow": pool_config.get("max_overflow", 20),
-                "pool_pre_ping": pool_config.get("pre_ping", True),
-                **db.get("engine_kwargs", {}),
-            }
-
     @PostConstruct
     async def init_db(self):
         try:
-            logger.info(f"Connecting to database: {self.async_url}")
-            self.engine = create_async_engine(self.async_url, connect_args=self.connect_args, **self.engine_kwargs)
-            self.session_factory = async_sessionmaker(self.engine, class_=AsyncSession, autocommit=False, autoflush=False, expire_on_commit=False)
-            logger.info("Database connection pool created successfully")
+            db_type=self.config.get("database", {}).get("type","sqlite")
+            for initializer in self.initalizers:
+                if initializer.get_type()==db_type:
+                    initializer.parse(self.config.get("database", {})) 
+                    logger.info(f"Connecting to database: {initializer.async_url}")
+                    self.engine = create_async_engine(initializer.async_url, connect_args=initializer.connect_args, **initializer.engine_kwargs)
+                    self.session_factory = async_sessionmaker(self.engine, class_=AsyncSession, autocommit=False, autoflush=False, expire_on_commit=False)
+                    logger.info("Database connection pool created successfully")
+                    return
+            raise  RuntimeError(f"No initializer found for database type: {db_type}")
         except Exception as e:
             logger.error(f"Failed to initialize database: {e}", exc_info=True)
             raise

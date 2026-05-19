@@ -2,9 +2,9 @@ import inspect
 import logging
 from typing import Any, Awaitable, Callable, Dict, List, Type, Union
 
-from .component import Component
-from .context import ApplicationContext
-from .decorators import PostConstruct
+from ..component import Component
+from ..context import ApplicationContext
+from ..decorators import PostConstruct
 
 logger = logging.getLogger(__name__)
 

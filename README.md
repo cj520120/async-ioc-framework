@@ -357,7 +357,7 @@ async def get_user(id: int):
 
 - 条件类 – Condition, OnPropertyCondition, OnClassExists, OnMissingClass, AllConditions, AnyCondition, NotCondition
 
-## 数据库扩展 (ioc.db)
+## 数据库扩展 (ioc.ext.data)
 
 - DatabaseFactory – 异步数据库连接池工厂
 
