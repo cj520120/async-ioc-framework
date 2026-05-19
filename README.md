@@ -303,6 +303,7 @@ class RedisCache: ...
 active_profiles: ["dev"] # 激活的环境
 app_name: MyApp
 database:
+  type: sqlite
   url: sqlite+aiosqlite:///test.db
 timeout: 30
 debug: true
@@ -321,22 +322,36 @@ modules: # 可选：需要扫描的模块
 from fastapi import FastAPI
 from ioc import ApplicationContext
 from ioc.ext.data import transactional, get_current_session
+from fastapi import FastAPI
+from contextlib import asynccontextmanager
+from pydantic import BaseModel
+class UserCreate(BaseModel):
+    username: str
 
-app = FastAPI()
-
-@app.on_event("startup")
-async def startup():
-    ApplicationContext.initialize("config.yaml")
+class UserInfo(UserCreate):
+    id: int
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    ApplicationContext.initialize(config_file="config.yaml")
+    base_path = Path(__file__).resolve().parent
+    moudels=[]
+    for module in moudels:
+        await ApplicationContext.scan_directory(base_path=base_path, base_package=module,raise_on_error=True)
     await ApplicationContext.refresh()
-
-@app.on_event("shutdown")
-async def shutdown():
+    yield
     await ApplicationContext.close()
+app = FastAPI(lifespan=lifespan)
+@app.post("/register")
+async def register(user: UserCreate):
+    dao = ApplicationContext.get_bean(UserDao)
+    user_id=await dao.create_user(user.username)
+    return  {"id":user_id}
 
-@app.get("/users/{id}")
-async def get_user(id: int):
-    service = ApplicationContext.get_bean(UserService)
-    return await service.get_user(id)
+@app.get("/users/{user_id}")
+async def get_user(user_id:int):
+    dao = ApplicationContext.get_bean(UserDao)
+    user=await dao.get_user(user_id)
+    return  UserInfo(id=user.id,username=user.name)
 ```
 
 # API 参考

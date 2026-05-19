@@ -165,7 +165,7 @@ class AuditLogger:
 
 
 # ========== 6. 启动应用 ==========
-async def main():
+async def run_main():
     # 方式一：手动控制容器生命周期
     # ApplicationContext.initialize("config.yaml")
     # await ApplicationContext.refresh()
@@ -176,6 +176,41 @@ async def main():
     base_path = Path(__file__).resolve().parent
     await run_async("config.yaml", base_path, modules=[])
 
+def run_fast_api():
+    from fastapi import FastAPI
+    from contextlib import asynccontextmanager
+    from ioc import ApplicationContext
+    from pydantic import BaseModel
+    class UserCreate(BaseModel):
+        username: str 
 
+    class UserInfo(UserCreate):
+        id: int
+    @asynccontextmanager
+    async def lifespan(app: FastAPI):
+        ApplicationContext.initialize(config_file="config.yaml") 
+        base_path = Path(__file__).resolve().parent
+        moudels=[]
+        for module in moudels: 
+            await ApplicationContext.scan_directory(base_path=base_path, base_package=module,raise_on_error=True)
+        await ApplicationContext.refresh()
+        yield
+        await ApplicationContext.close()
+    app = FastAPI(lifespan=lifespan)
+    @app.post("/register")
+    async def register(user: UserCreate):
+        dao = ApplicationContext.get_bean(UserDao)
+        user_id=await dao.create_user(user.username)
+        return  {"id":user_id}
+    
+    @app.get("/users/{user_id}")
+    async def get_user(user_id:int):
+        dao = ApplicationContext.get_bean(UserDao)
+        user=await dao.get_user(user_id)
+        return  UserInfo(id=user.id,username=user.name) 
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+    
 if __name__ == "__main__":
-    asyncio.run(main())
+    # asyncio.run(run_async())
+    run_fast_api()

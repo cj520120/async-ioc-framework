@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "async-ioc-framework"
-version = "0.0.2"
+version = "0.1.1"
 authors = [{ name = "chenjun", email = "cj520120@163.com" }]
 description = "A lightweight, high-performance async IoC container"
 readme = "README.md"
@@ -37,4 +37,4 @@ all = [
 
 [tool.setuptools.packages.find]
 where = ["src"]
-exclude = ["tests", "tests.*"]
+exclude = ["tests", "tests.*","samples","samples.*"]
