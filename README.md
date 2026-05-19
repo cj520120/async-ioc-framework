@@ -92,8 +92,8 @@ timeout: 30
 ```
 
 ```python
-from ioc import Component, Value, Annotated
-
+from ioc import Component, Value
+from typing import Annotated
 @Component
 class ConfigConsumer:
     def __init__(
