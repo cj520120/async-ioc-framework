@@ -24,5 +24,6 @@ class MySqlInitiallzer(DatabaseInitializer):
             "pool_pre_ping": pool_config.get("pre_ping", True),
             **db.get("engine_kwargs", {}),
         }
-    def get_type(self)->str:
+
+    def get_type(self) -> str:
         return "mysql"

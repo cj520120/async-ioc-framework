@@ -13,5 +13,6 @@ class SqliteInitiallzer(DatabaseInitializer):
         if "isolation_level" not in self.connect_args:
             self.connect_args["isolation_level"] = "DEFERRED"
         self.engine_kwargs = db.get("engine_kwargs", {})
-    def get_type(self)->str:
+
+    def get_type(self) -> str:
         return "sqlite"
