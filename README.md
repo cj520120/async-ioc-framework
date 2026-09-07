@@ -304,7 +304,7 @@ active_profiles: ["dev"] # 激活的环境
 app_name: MyApp
 database:
   type: sqlite
-  url: sqlite+aiosqlite:///test.db
+  file: test.db
 timeout: 30
 debug: true
 feature:
